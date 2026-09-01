@@ -25,12 +25,9 @@ app.get('/health', (req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  if (error.statusCode === 400) {
-    res.status(400).json({ error: error.message });
-    return;
-  }
-
-  next(error);
+  const statusCode = error.statusCode || 500;
+  const message = statusCode < 500 ? error.message : 'Erro interno do servidor';
+  res.status(statusCode).json({ error: message });
 });
 
 if (require.main === module) {

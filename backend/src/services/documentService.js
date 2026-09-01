@@ -27,14 +27,8 @@ class DocumentService {
     return this.documentRepository.findAll();
   }
 
-  getDocumentDownload(id) {
-    const storedDocument = this.documentRepository.findById(id);
-
-    if (!storedDocument) {
-      return null;
-    }
-
-    return storedDocument;
+  getDocumentById(id) {
+    return this.documentRepository.findById(id);
   }
 }
 

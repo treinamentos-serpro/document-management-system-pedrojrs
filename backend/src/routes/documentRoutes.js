@@ -20,9 +20,18 @@ const repository = new DocumentRepository();
 const service = new DocumentService(repository);
 const controller = new DocumentController(service);
 const router = Router();
+const parsePositiveInteger = (value, fallback) => {
+  const parsedValue = Number(value);
+  return Number.isInteger(parsedValue) && parsedValue > 0 ? parsedValue : fallback;
+};
+const uploadRateLimitWindow = parsePositiveInteger(
+  process.env.UPLOAD_RATE_LIMIT_WINDOW_MS,
+  15 * 60 * 1000
+);
+const uploadRateLimitMax = parsePositiveInteger(process.env.UPLOAD_RATE_LIMIT_MAX, 100);
 const uploadRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 100,
+  windowMs: uploadRateLimitWindow,
+  limit: uploadRateLimitMax,
   standardHeaders: 'draft-8',
   legacyHeaders: false,
   message: { error: 'Muitas tentativas de upload. Tente novamente mais tarde.' }
