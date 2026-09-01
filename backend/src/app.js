@@ -19,6 +19,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(documentsRoutes);
 
+app.get('/', (req, res) => {
+  res.json({ message: 'DMS backend em execução.' });
+});
+
 // Endpoint de verificação de saúde. As demais rotas (/upload, /documents,
 // /documents/:id/download) serão implementadas durante o Passo 2.
 app.get('/health', (req, res) => {
