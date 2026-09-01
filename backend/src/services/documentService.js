@@ -27,8 +27,17 @@ class DocumentService {
     return this.documentRepository.findAll();
   }
 
-  getDocumentById(id) {
-    return this.documentRepository.findById(id);
+  getDocumentDownload(id) {
+    const storedDocument = this.documentRepository.findById(id);
+
+    if (!storedDocument) {
+      return null;
+    }
+
+    return {
+      filePath: storedDocument.filePath,
+      originalName: storedDocument.document.originalName
+    };
   }
 }
 

@@ -18,7 +18,7 @@ class DocumentController {
   };
 
   download = (req, res, next) => {
-    const storedDocument = this.documentService.getDocumentById(req.params.id);
+    const storedDocument = this.documentService.getDocumentDownload(req.params.id);
 
     if (!storedDocument) {
       res.status(404).json({ error: 'Documento não encontrado' });
@@ -27,7 +27,7 @@ class DocumentController {
 
     res.download(
       storedDocument.filePath,
-      storedDocument.document.originalName,
+      storedDocument.originalName,
       (error) => {
         if (error) {
           next(error);
