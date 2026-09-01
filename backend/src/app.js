@@ -19,14 +19,13 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(documentRoutes);
 
-// Endpoint de verificação de saúde. As demais rotas (/upload, /documents,
-// /documents/:id/download) serão implementadas durante o Passo 2.
+// Endpoint de verificação de saúde.
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
 app.use((error, req, res, next) => {
-  if (error instanceof Error && error.message === 'Um arquivo é obrigatório') {
+  if (error.statusCode === 400) {
     res.status(400).json({ error: error.message });
     return;
   }

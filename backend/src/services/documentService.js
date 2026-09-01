@@ -7,7 +7,9 @@ class DocumentService {
 
   createDocument(file, owner) {
     if (!file) {
-      throw new Error('Um arquivo é obrigatório');
+      const error = new Error('Um arquivo é obrigatório');
+      error.statusCode = 400;
+      throw error;
     }
 
     const document = {
