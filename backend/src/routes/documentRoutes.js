@@ -24,21 +24,21 @@ const parsePositiveInteger = (value, fallback) => {
   const parsedValue = Number(value);
   return Number.isInteger(parsedValue) && parsedValue > 0 ? parsedValue : fallback;
 };
-const uploadRateLimitWindow = parsePositiveInteger(
-  process.env.UPLOAD_RATE_LIMIT_WINDOW_MS,
+const documentRateLimitWindow = parsePositiveInteger(
+  process.env.DOCUMENT_RATE_LIMIT_WINDOW_MS,
   15 * 60 * 1000
 );
-const uploadRateLimitMax = parsePositiveInteger(process.env.UPLOAD_RATE_LIMIT_MAX, 100);
-const uploadRateLimit = rateLimit({
-  windowMs: uploadRateLimitWindow,
-  limit: uploadRateLimitMax,
+const documentRateLimitMax = parsePositiveInteger(process.env.DOCUMENT_RATE_LIMIT_MAX, 100);
+const documentRateLimit = rateLimit({
+  windowMs: documentRateLimitWindow,
+  limit: documentRateLimitMax,
   standardHeaders: 'draft-8',
   legacyHeaders: false,
   message: { error: 'Muitas tentativas de upload. Tente novamente mais tarde.' }
 });
 
-router.post('/upload', uploadRateLimit, upload.single('file'), controller.upload);
+router.post('/upload', documentRateLimit, upload.single('file'), controller.upload);
 router.get('/documents', controller.list);
-router.get('/documents/:id/download', controller.download);
+router.get('/documents/:id/download', documentRateLimit, controller.download);
 
 module.exports = router;
